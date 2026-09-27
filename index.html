@@ -7,162 +7,192 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        .accordion-content {
+        /* Sidebar submenu */
+        .submenu {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.3s ease-out;
+            transition: max-height 0.3s ease-out;
         }
-        .accordion-content.open {
-            max-height: 3000px;
+        .submenu.open {
+            max-height: 300px;
             overflow: visible;
         }
-        .accordion-header {
+        .submenu-item {
+            padding: 8px 16px 8px 32px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            transition: all 0.15s;
             cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
+            border-left: 2px solid transparent;
         }
-        .accordion-header:hover {
-            background-color: #f8fafc;
+        .submenu-item:hover {
+            color: #e2e8f0;
+            background-color: #1e293b;
+            border-left-color: #3b82f6;
         }
-        .accordion-header .chevron {
-            transition: transform 0.3s ease;
+        .submenu-item.active {
+            color: #60a5fa;
+            background-color: #1e293b;
+            border-left-color: #3b82f6;
         }
-        .accordion-header .chevron.open {
-            transform: rotate(180deg);
-        }
-        .accordion-item {
-            border-radius: 12px;
-            margin-bottom: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            background: white;
-            border: 1px solid #e2e8f0;
-        }
-        .accordion-item.active {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: #3b82f6;
-        }
-        .group-title {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            letter-spacing: 0.025em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+
+        /* Toggle chevron */
+        .chevron { transition: transform 0.2s ease; }
+        .chevron.open { transform: rotate(90deg); }
+
+        /* Content sections */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="h-screen flex flex-col md:flex-row overflow-hidden">
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-4xl mx-auto px-4 py-6 md:py-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Winnipeg Skywalk</h1>
-            <p class="text-slate-500 mt-2 text-sm md:text-base">Interactive Facility Report — Click any section to expand</p>
+    <!-- Sidebar Menu -->
+    <aside class="w-full md:w-80 bg-slate-900 text-slate-300 flex flex-col h-auto md:h-full border-r border-slate-700 z-10 flex-shrink-0">
+        <div class="p-6 bg-slate-950 shadow-md">
+            <h1 class="text-2xl font-bold text-white tracking-tight">Winnipeg Skywalk</h1>
+            <p class="text-sm text-slate-400 mt-1">Interactive Facility Report</p>
         </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 py-6 md:py-10 pb-24">
+        <!-- Mobile Toggle -->
+        <div class="md:hidden p-4 border-b border-slate-700 bg-slate-800 flex justify-between items-center cursor-pointer" onclick="toggleMobileMenu()">
+            <span class="font-semibold text-white">Select Location</span>
+            <svg id="menu-icon" class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
 
-        <!-- ACCORDION GROUP 1: Skywalk Stops -->
-        <div class="mb-10">
-            <div class="group-title">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                Skywalk Stops
-            </div>
+        <nav id="sidebar-nav" class="flex-1 overflow-y-auto hidden md:block py-4">
+            <ul class="space-y-1 px-3">
+                <!-- SKYWALK GROUP -->
+                <li class="py-2 px-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Skywalk Stops</span>
+                </li>
+                <li><button onclick="showSection('canadalife')" id="btn-canadalife" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Canada Life Centre</button></li>
+                <li><button onclick="showSection('truenorth')" id="btn-truenorth" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">True North Square</button></li>
+                <li><button onclick="showSection('cityplace')" id="btn-cityplace" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Cityplace</button></li>
+                <li><button onclick="showSection('rbc')" id="btn-rbc" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">RBC & Delta Hotel</button></li>
+                <li><button onclick="showSection('library')" id="btn-library" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Millennium Library</button></li>
+                <li><button onclick="showSection('wpgsquare')" id="btn-wpgsquare" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Winnipeg Square</button></li>
+                <li><button onclick="showSection('portagemain')" id="btn-portagemain" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Portage & Main Concourse</button></li>
+                <li><button onclick="showSection('hydro')" id="btn-hydro" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Manitoba Hydro Place</button></li>
+                <li><button onclick="showSection('portageplace')" id="btn-portageplace" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Portage Place & YMCA</button></li>
 
-            <!-- Radisson Hotel -->
-            <div class="accordion-item" id="item-radisson">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('radisson')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Start of the Loop</span>
-                        <h3 class="text-lg font-bold text-slate-900">Radisson Hotel</h3>
+                <!-- SEPARATOR -->
+                <li class="my-3 border-t border-slate-700"></li>
+
+                <!-- OTHER GROUP -->
+                <li class="py-2 px-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Other</span>
+                </li>
+
+                <!-- Radisson Hotel with submenu -->
+                <li>
+                    <button onclick="toggleSubmenu('radisson-sub')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium flex items-center justify-between">
+                        <span>Radisson Hotel</span>
+                        <svg class="chevron w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    <div id="radisson-sub" class="submenu">
+                        <div class="submenu-item" onclick="showSection('radisson')">Radisson Hotel</div>
+                        <div class="submenu-item" onclick="showSection('radisson-amenities')">Radisson Details</div>
                     </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-radisson">
-                    <div class="pb-5">
-                        <div class="mb-6 border-b border-slate-200 pb-4">
-                            <a href="https://www.radissonhotels.com/en-us/hotels/radisson-winnipeg-downtown" target="_blank" class="text-blue-500 hover:underline text-sm inline-flex items-center mt-1">
-                                Official Website <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            </a>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <h4 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
-                                    Dining & Drinks
-                                </h4>
-                                <ul class="space-y-3 text-sm text-slate-600">
-                                    <li><strong>12 Resto Bar & Lounge</strong> — 12th floor, floor-to-ceiling downtown views, cocktails, local drafts.</li>
-                                    <li><strong>Starbucks Coffee</strong> — On-site café.</li>
-                                    <li><strong>Lobby Coffee Counter</strong> — Morning espresso, teas, grab-and-go breakfast.</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <h4 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                    Connections
-                                </h4>
-                                <p class="text-sm text-slate-600 mb-3">Primary eastern anchor for the southern Skywalk route. Connects west to Canada Life Centre and south toward Cityplace.</p>
-                                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
-                                    <li>Direct heated parkade access</li>
-                                    <li>Concierge & business facilities</li>
-                                    <li>Skywalk open weekdays 7am–6pm</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </li>
 
-            <!-- Canada Life Centre -->
-            <div class="accordion-item" id="item-canadalife">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('canadalife')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Entertainment</span>
-                        <h3 class="text-lg font-bold text-slate-900">Canada Life Centre</h3>
+                <!-- Keg with submenu -->
+                <li>
+                    <button onclick="toggleSubmenu('keg-sub')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium flex items-center justify-between">
+                        <span>The Keg Steakhouse</span>
+                        <svg class="chevron w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    <div id="keg-sub" class="submenu">
+                        <div class="submenu-item" onclick="showSection('keg')">The Keg</div>
+                        <div class="submenu-item" onclick="showSection('keg-directions')">Directions from Radisson</div>
                     </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </li>
+
+                <!-- Airport & Transit standalone -->
+                <li><button onclick="showSection('airport')" id="btn-airport" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white text-sm font-medium">Airport & Transit</button></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto bg-white relative">
+        <div class="max-w-5xl mx-auto p-6 md:p-12 pb-24">
+
+            <!-- SKYWALK SECTION: Canada Life Centre -->
+            <section id="canadalife" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6 flex flex-col md:flex-row md:items-end justify-between">
+                    <div>
+                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Entertainment & Sports Hub</span>
+                        <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Canada Life Centre</h2>
+                        <a href="https://www.canadalifecentre.ca" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">
+                            canadalifecentre.ca <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
                 </div>
-                <div class="accordion-content px-5" id="content-canadalife">
-                    <div class="pb-5">
-                        <p class="text-slate-600 mb-4">Home arena of the Winnipeg Jets (NHL) and Manitoba Moose (AHL), hosting concerts, family shows, and sporting events.</p>
-                        <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 mb-4">
-                            <h4 class="text-xl font-bold text-slate-900 mb-3">Jets Gear Store (True North Shop)</h4>
-                            <p class="text-sm text-slate-600 mb-3">300 Portage Ave at Portage & Hargrave. Official jerseys, customization, and game-used gear.</p>
-                            <a href="https://truenorthshop.com" target="_blank" class="inline-block px-4 py-2 bg-slate-900 text-white rounded text-sm font-medium">Shop True North Online</a>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                                <h4 class="font-bold text-slate-900 mb-2">Ticket Box Office</h4>
-                                <p class="text-sm text-slate-600">Corner of Portage Ave & Donald St, Gate 1. Weekdays 10AM–2PM.</p>
-                            </div>
-                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                                <h4 class="font-bold text-slate-900 mb-2">Dining</h4>
-                                <p class="text-sm text-slate-600"><strong>Moxies</strong> — Multi-level restaurant. Plus Crown Royal Club and event bars on game days.</p>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                            <h4 class="font-bold text-slate-900 mb-3">Connected Skybridges</h4>
-                            <ul class="space-y-2 text-sm text-slate-600">
-                                <li>🏢 <strong>Gate 6:</strong> To Cityplace (with event-day security screening)</li>
-                                <li>🏢 <strong>True North Square Bridge:</strong> To Hargrave St. Market</li>
-                                <li>🏢 <strong>Donald Street Bridge:</strong> To the Radisson Hotel</li>
+                <p class="text-lg text-slate-600 mb-8">Home arena of the Winnipeg Jets (NHL) and Manitoba Moose (AHL), hosting stadium concerts, family shows, and major sporting events.</p>
+                <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 md:p-8 mb-6">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+                        <svg class="w-7 h-7 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        Jets Gear Store (True North Shop)
+                    </h3>
+                    <p class="text-sm text-slate-600 mb-3">300 Portage Ave at Portage & Hargrave — street level with direct internal access to skywalk elevators.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-lg mt-2">Merchandise</h4>
+                            <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                                <li>Home/away/third jerseys, headwear, youth apparel</li>
+                                <li>Custom jersey lettering & numberings</li>
+                                <li>Game-used jerseys, sticks, pucks</li>
                             </ul>
-                            <h4 class="font-bold text-slate-900 mb-2 mt-4">Top Heated Parkades</h4>
-                            <ul class="list-disc pl-5 text-sm text-slate-600">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-lg mt-2">Game-Day Outposts</h4>
+                            <p class="text-sm text-slate-600">Skywalk Atrium, Main Concourse (North End), Upper Concourse kiosks on event nights.</p>
+                            <a href="https://truenorthshop.com" target="_blank" class="inline-block px-4 py-2 bg-slate-900 text-white rounded text-sm mt-2">Shop True North Online</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                    <div class="bg-white border border-slate-200 shadow-sm rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 border-b pb-2">Ticket Box Office</h3>
+                        <p class="text-sm text-slate-600"><strong>Location:</strong> Gate 1, Portage Ave & Donald St.</p>
+                        <ul class="mt-2 space-y-1 text-sm text-slate-600">
+                            <li>Ticketmaster sales, will call, accessible seating</li>
+                            <li>Weekdays 10AM–2PM, open during events</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white border border-slate-200 shadow-sm rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 border-b pb-2">Dining</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li><strong>Moxies</strong> — Multi-level restaurant, Portage Ave entrance</li>
+                            <li><strong>Crown Royal Club</strong> — Event-day premium lounge</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 md:p-8">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Connected Skybridges & Parkades</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">Skybridges</h4>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li>🏢 <strong>Gate 6:</strong> South to Cityplace (event-day security screening)</li>
+                                <li>🏢 <strong>True North Square Bridge:</strong> Southwest to Hargrave St. Market</li>
+                                <li>🏢 <strong>Donald Street Bridge:</strong> East to Radisson Hotel</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-2">Top Heated Parkades</h4>
+                            <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
                                 <li>True North Square Parkade (via Hargrave Skybridge)</li>
                                 <li>Cityplace Parkade Lot 1 (via Gate 6)</li>
                                 <li>Millennium Library Parkade</li>
@@ -172,546 +202,530 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- True North Square -->
-            <div class="accordion-item" id="item-truenorth">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('truenorth')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Culinary Hub</span>
-                        <h3 class="text-lg font-bold text-slate-900">True North Square</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-truenorth">
-                    <div class="pb-5">
-                        <div class="flex gap-4 mb-4">
-                            <a href="https://www.truenorthsquare.com" target="_blank" class="text-blue-500 hover:underline text-sm">truenorthsquare.com</a>
-                            <a href="https://www.hargravestmarket.com" target="_blank" class="text-blue-500 hover:underline text-sm">hargravestmarket.com</a>
-                        </div>
-                        <div class="mb-5">
-                            <h4 class="font-bold text-slate-900 mb-2 border-l-4 border-amber-500 pl-3">Hargrave St. Market (Level 2)</h4>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Rose Bar</span>
-                                <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Lake of the Woods Brewing</span>
-                                <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Gusto North</span>
-                                <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Yard Burger</span>
-                                <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Saburo Kitchen</span>
-                                <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">The Good Fight Taco</span>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-2">Ground Level</h4>
-                                <ul class="space-y-1 text-sm text-slate-600">
-                                    <li>📍 <strong>Mottola Grocery</strong> — Gourmet market & deli</li>
-                                    <li>🖥️ <strong>Public Plaza</strong> — Massive screens for Jets watch parties</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-2">Corporate</h4>
-                                <ul class="space-y-1 text-sm text-slate-600">
-                                    <li>🏢 Wawanesa Insurance HQ</li>
-                                    <li>🏦 Scotiabank branch</li>
-                                    <li>🔗 Connections to 300 Main, Canada Life Centre</li>
-                                </ul>
-                            </div>
-                        </div>
+            <!-- SKYWALK SECTION: True North Square -->
+            <section id="truenorth" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Premier Culinary Hub</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">True North Square</h2>
+                    <div class="flex gap-4 mt-2">
+                        <a href="https://www.truenorthsquare.com" target="_blank" class="text-blue-500 hover:underline text-sm">truenorthsquare.com</a>
+                        <a href="https://www.hargravestmarket.com" target="_blank" class="text-blue-500 hover:underline text-sm">hargravestmarket.com</a>
                     </div>
                 </div>
-            </div>
+                <p class="text-slate-600 mb-6">The culinary highlight of the entire walkway system, featuring upscale food halls, craft breweries, and fine dining.</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                    <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Rose Bar</span>
+                    <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Lake of the Woods Brewing</span>
+                    <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Gusto North</span>
+                    <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Yard Burger</span>
+                    <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">Saburo Kitchen</span>
+                    <span class="bg-white p-3 rounded-lg border border-slate-200 text-sm font-medium">The Good Fight Taco</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 mb-2">Ground Level</h4>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>📍 <strong>Mottola Grocery</strong> — Gourmet market & deli counter</li>
+                            <li>🖥️ <strong>Public Plaza</strong> — Massive screens for Jets watch parties</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 mb-2">Corporate</h4>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>🏢 Wawanesa Insurance HQ</li>
+                            <li>🏦 Scotiabank branch</li>
+                            <li>🔗 Connections to 300 Main, Canada Life Centre</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Cityplace -->
-            <div class="accordion-item" id="item-cityplace">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('cityplace')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Retail</span>
-                        <h3 class="text-lg font-bold text-slate-900">Cityplace</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <!-- SKYWALK SECTION: Cityplace -->
+            <section id="cityplace" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Retail & Quick Bites</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Cityplace</h2>
+                    <a href="https://cityplacewinnipeg.com" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">
+                        cityplacewinnipeg.com <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
                 </div>
-                <div class="accordion-content px-5" id="content-cityplace">
-                    <div class="pb-5">
-                        <a href="https://cityplacewinnipeg.com" target="_blank" class="text-blue-500 hover:underline text-sm inline-block mb-4">cityplacewinnipeg.com</a>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h4 class="font-bold text-slate-900 mb-3">Dining & Nightlife</h4>
-                                <ul class="space-y-2 text-sm text-slate-600">
-                                    <li>🍔 <strong>Shark Club Sports Bar</strong> — HD screens, arcade games, VLT casino</li>
-                                    <li>🍕 <strong>Boston Pizza</strong> — Family restaurant & sports lounge</li>
-                                    <li>🍜 <strong>Bodegoes</strong> — Custom noodle boxes, stir-fries</li>
-                                </ul>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Dining & Nightlife</h3>
+                        <div class="space-y-3">
+                            <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                                <strong class="text-slate-900">Shark Club Sports Bar</strong>
+                                <p class="text-sm text-slate-600 mt-1">HD screens, arcade games, VLT casino, cold beer, pub grub.</p>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 mb-3">Food Court & Services</h4>
-                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                    <p class="text-sm text-slate-600 mb-2"><strong>Food Court:</strong> Peg City Poutine, Sushi June, Za Pizza, Subway, Tim Hortons, A&W, Human Bean</p>
-                                    <p class="text-sm text-slate-600"><strong>Services:</strong> Rexall Pharmacy, Manitoba Lotteries, dental, hair salon, dry cleaner, flower shop, multi-level heated parking</p>
-                                </div>
+                            <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                                <strong class="text-slate-900">Boston Pizza</strong>
+                                <p class="text-sm text-slate-600 mt-1">Family restaurant & separate sports lounge.</p>
+                            </div>
+                            <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                                <strong class="text-slate-900">Bodegoes</strong>
+                                <p class="text-sm text-slate-600 mt-1">Custom noodle boxes, stir-fries, rice bowls.</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- RBC & Delta -->
-            <div class="accordion-item" id="item-rbc">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('rbc')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Events</span>
-                        <h3 class="text-lg font-bold text-slate-900">RBC Convention Centre & Delta Hotel</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-rbc">
-                    <div class="pb-5">
-                        <p class="text-slate-600 mb-4">260,000+ sq. ft. of exhibition halls (Hall A-D) for conventions and galas.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="border-l-4 border-indigo-600 pl-4">
-                                <h4 class="font-bold text-slate-900 mb-3">Restaurants & Pubs</h4>
-                                <ul class="space-y-2 text-sm text-slate-600">
-                                    <li>🍻 <strong>Elephant & Castle</strong> (Delta) — British pub</li>
-                                    <li>🍽️ <strong>Blaze Bistro</strong> (Delta) — Manitoba cuisine</li>
-                                    <li>🍛 <strong>East India Company</strong> — Indian buffet & lounge</li>
-                                    <li>🍣 <strong>Ichiban</strong> — Teppanyaki & sushi bar</li>
-                                    <li>🥃 <strong>Shannon's Irish Pub</strong> — Live music, Guinness</li>
-                                </ul>
-                            </div>
-                            <div class="bg-indigo-50/50 p-5 rounded-xl border border-indigo-100">
-                                <h4 class="font-bold text-slate-900 mb-3">Accommodations</h4>
-                                <ul class="space-y-2 text-sm text-slate-700">
-                                    <li>🏨 Delta Hotels by Marriott — Direct indoor integration</li>
-                                    <li>🏢 Holiday Towers — Residential links</li>
-                                    <li>🏦 BDC & provincial government offices</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Millennium Library -->
-            <div class="accordion-item" id="item-library">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('library')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Civic</span>
-                        <h3 class="text-lg font-bold text-slate-900">Millennium Library & Cargill Building</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-library">
-                    <div class="pb-5">
-                        <a href="https://wpl.winnipeg.ca" target="_blank" class="text-blue-500 hover:underline text-sm inline-block mb-3">wpl.winnipeg.ca</a>
-                        <p class="text-slate-600 mb-4">Main downtown public library with multi-floor collections, IdeaBOX makerspace, study lounges, public artwork, and outdoor park terrace.</p>
-                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                            <h4 class="font-bold text-slate-900 mb-2">Transit & Corporate</h4>
-                            <p class="text-sm text-slate-600">Houses HSBC Bank and Cargill offices. Direct escalator access to the <strong>Graham Avenue Transit Mall</strong> — downtown's central bus interchange.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Winnipeg Square -->
-            <div class="accordion-item" id="item-wpgsquare">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('wpgsquare')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Underground</span>
-                        <h3 class="text-lg font-bold text-slate-900">Winnipeg Square & 300/360 Main</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-wpgsquare">
-                    <div class="pb-5">
-                        <a href="https://www.winnipegsquare.com" target="_blank" class="text-blue-500 hover:underline text-sm inline-block mb-4">winnipegsquare.com</a>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="md:col-span-2">
-                                <h4 class="font-bold text-slate-900 mb-2">Underground Food Court</h4>
-                                <div class="grid grid-cols-2 gap-1 text-sm text-slate-600">
-                                    <span>• Taste of Sri Lanka</span><span>• Stoneworks Bistro</span><span>• Vinh Long Vietnamese</span><span>• UMI Sushi</span><span>• Cookies by George</span><span>• Booster Juice</span><span>• Freshii</span><span>• Double Bowl</span><span>• Crown Town Pizzeria</span><span>• Oriental Wok</span><span>• Rodos Greek</span><span>• A&W</span>
-                                </div>
-                            </div>
-                            <div class="bg-slate-900 text-white p-5 rounded-xl">
-                                <h4 class="font-bold mb-3">Tower Anchors</h4>
-                                <ul class="space-y-3 text-sm">
-                                    <li><span class="text-blue-300">300 Main</span> — Tallest luxury apartment tower</li>
-                                    <li><span class="text-blue-300">360 Main</span> — Former Commodity Exchange Tower</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-xl p-5 mt-4 shadow-sm">
-                            <h4 class="font-bold text-slate-900 mb-2">Retail & Services</h4>
-                            <p class="text-sm text-slate-600">Shoppers Drug Mart (with Post Office), Mayberry Fine Art, TD Canada Trust, Access Credit Union, The UPS Store, dental centre, salons.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Portage & Main -->
-            <div class="accordion-item" id="item-portagemain">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('portagemain')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Intersection</span>
-                        <h3 class="text-lg font-bold text-slate-900">Portage & Main Concourse</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-portagemain">
-                    <div class="pb-5">
-                        <p class="text-slate-600 mb-4">The safest and warmest way to cross Canada's windiest intersection year-round. Connects the Richardson Building, 201 Portage, and the Fairmont Hotel.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h4 class="font-bold text-slate-900 mb-2">Fine Dining</h4>
-                                <ul class="space-y-2 text-sm text-slate-600">
-                                    <li>🥩 <strong>Hy's Steakhouse & Cocktail Bar</strong> — Richardson Building</li>
-                                    <li>🍽️ <strong>VG Restaurant & Lounge</strong> — Fairmont, modern Canadian</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-2">Hotels & Finance</h4>
-                                <ul class="space-y-2 text-sm text-slate-700">
-                                    <li>🏨 <strong>Fairmont Winnipeg</strong></li>
-                                    <li>🏦 <strong>RBC, CIBC, Scotiabank</strong></li>
-                                    <li>⚖️ TDS Law offices</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manitoba Hydro Place -->
-            <div class="accordion-item" id="item-hydro">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('hydro')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Architectural</span>
-                        <h3 class="text-lg font-bold text-slate-900">Manitoba Hydro Place</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-hydro">
-                    <div class="pb-5">
-                        <p class="text-slate-600 mb-4">Award-winning green skyscraper with a soaring glass atrium and continuous indoor waterfall wall. Warm public indoor seating popular in winter.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="prose text-sm text-slate-600">
-                                <p>360 Portage Ave. Features natural humidity regulation and rotating public art installations.</p>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-2">Connectivity</h4>
-                                <p class="text-sm text-slate-600">Express coffee vendor available. Vital pedestrian pass-through connecting the Graham Avenue transit spine to Portage Avenue.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Portage Place & YMCA -->
-            <div class="accordion-item" id="item-portageplace">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('portageplace')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Western</span>
-                        <h3 class="text-lg font-bold text-slate-900">Portage Place & YMCA</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-portageplace">
-                    <div class="pb-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div class="bg-white p-5 border border-slate-200 rounded-xl shadow-sm">
-                                <h4 class="font-bold text-slate-900 mb-2 flex items-center">🎭 Arts & Entertainment</h4>
-                                <p class="text-sm text-slate-600"><strong>Prairie Theatre Exchange</strong> — Mainstage theater with licensed lobby lounge accessible via skywalk.</p>
-                            </div>
-                            <div class="bg-white p-5 border border-slate-200 rounded-xl shadow-sm">
-                                <h4 class="font-bold text-slate-900 mb-2 flex items-center">🏋️ Fitness & Wellness</h4>
-                                <p class="text-sm text-slate-600"><strong>Downtown YMCA/YWCA</strong> — Pool, indoor running track, weight room, basketball court, drop-in classes.</p>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                            <h4 class="font-bold text-slate-900 mb-2">Retail & Civic Services</h4>
-                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
-                                <li>Portage Place shopping concourse, Tim Hortons (Power Building), Somali Mall shops</li>
-                                <li>Downtown Winnipeg BIZ offices, Investors Group (One Canada Centre), Fred Douglas Chateau</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ACCORDION GROUP 2: Other -->
-        <div>
-            <div class="group-title">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Other
-            </div>
-
-            <!-- Radisson Hotel -->
-            <div class="accordion-item" id="item-radisson">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('radisson')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Hotel</span>
-                        <h3 class="text-lg font-bold text-slate-900">Radisson Hotel Winnipeg Downtown</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-radisson">
-                    <div class="pb-5">
-                        <a href="https://www.radissonhotels.com/en-us/hotels/radisson-winnipeg-downtown" target="_blank" class="text-blue-500 hover:underline text-sm inline-flex items-center mb-3">
-                            Official Website <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <h4 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
-                                    Dining & Drinks
-                                </h4>
-                                <ul class="space-y-2 text-sm text-slate-600">
-                                    <li><strong>12 Resto Bar & Lounge</strong> — 12th floor, city views</li>
-                                    <li><strong>Starbucks</strong> — On-site café</li>
-                                    <li><strong>Lobby Coffee Counter</strong> — Morning espresso & breakfast</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <h4 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                    Connections
-                                </h4>
-                                <p class="text-sm text-slate-600 mb-2">Eastern anchor for the southern Skywalk. Connects west to Canada Life Centre and south to Cityplace.</p>
-                                <ul class="list-disc pl-5 text-sm text-slate-600">
-                                    <li>Direct heated parkade access</li>
-                                    <li>Skywalk open weekdays 7am–6pm</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Radisson Details -->
-            <div class="accordion-item" id="item-radisson-amenities">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('radisson-amenities')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Guide</span>
-                        <h3 class="text-lg font-bold text-slate-900">Radisson Details & Amenities</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-radisson-amenities">
-                    <div class="pb-5">
-                        <div class="bg-slate-900 text-white p-5 rounded-xl mb-5">
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                                <div><p class="text-xs text-slate-400">Address</p><p class="font-bold text-sm">288 Portage Ave</p></div>
-                                <div><p class="text-xs text-slate-400">Phone</p><p class="font-bold text-sm">(204) 956-0410</p></div>
-                                <div><p class="text-xs text-slate-400">Check-in</p><p class="font-bold text-sm">3:00 PM</p></div>
-                                <div><p class="text-xs text-slate-400">Rating</p><p class="font-bold text-sm">4-star · ~389 rooms</p></div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-3">Room Features</h4>
-                                <ul class="space-y-1 text-sm text-slate-600">
-                                    <li>Refrigerator & microwave</li>
-                                    <li>32" flat-screen TV</li>
-                                    <li>Tea/coffee maker, work desk</li>
-                                    <li>Free Wi-Fi</li>
-                                    <li>Whirlpool suites with city views</li>
-                                    <li>Air conditioning & heating</li>
-                                    <li>Iron/ironing board</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-3">Facilities</h4>
-                                <ul class="space-y-1 text-sm text-slate-600">
-                                    <li>🏋️ Fitness center</li>
-                                    <li>🧖 Sauna & shared lounge</li>
-                                    <li>💼 24-hour business centre</li>
-                                    <li>🚐 Daily city shuttle</li>
-                                    <li>💰 Currency exchange & ATM</li>
-                                    <li>🐾 Pets welcome</li>
-                                    <li>🅿️ Private parking</li>
-                                    <li>🔒 24-hour security</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-5">
-                            <h4 class="font-bold text-slate-900 mb-2">Things to Know</h4>
-                            <ul class="space-y-1 text-sm text-slate-700">
-                                <li>📍 1 block from Canada Life Centre via skywalk. 15-min walk to Exchange District & Chinatown.</li>
-                                <li>🚇 ~500m from Kasper – Hwy 1 Eastbound bus station.</li>
-                                <li>🏛️ Nearby: Millennium Library Park (~5 min), Manitoba Museum (~1.1 km), The Forks (~1.5 km).</li>
-                                <li>✈️ Airport ~5 km away.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- The Keg -->
-            <div class="accordion-item" id="item-keg">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('keg')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Dining</span>
-                        <h3 class="text-lg font-bold text-slate-900">The Keg Steakhouse + Bar</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-keg">
-                    <div class="pb-5">
-                        <div class="bg-blue-50/50 border border-amber-200 rounded-2xl p-4 mb-4">
-                            <p class="text-sm text-amber-900"><strong>⚠️ Relocation:</strong> Moved from 115 Garry St to <strong>185 Donald Street</strong> (DSM tower) — expected late fall 2026.</p>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <h4 class="font-bold text-slate-900 mb-2">Location</h4>
-                                <ul class="space-y-1 text-sm text-slate-600">
-                                    <li>📍 185 Donald Street (new) / 115 Garry St (former, closed Jul 29 2026)</li>
-                                    <li>📞 (204) 942-7619</li>
-                                    <li>🕐 Mon–Thu 4PM–11PM | Fri–Sat 4PM–12AM | Sun 4PM–10PM</li>
-                                    <li>🎉 Happy Hour daily to 5:30PM & 9PM–close</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <h4 class="font-bold text-slate-900 mb-2">What to Expect</h4>
-                                <ul class="space-y-1 text-sm text-slate-600">
-                                    <li>🥩 Prime Rib, Filet Mignon, Lobster Tail</li>
-                                    <li>🍟 Keg Fries & Billy Miner Pie</li>
-                                    <li>🍷 Full bar, lounge, patio</li>
-                                    <li>🧒 Kids' menu</li>
-                                    <li>📅 Reservations recommended</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900 text-white p-5 rounded-xl">
-                            <h4 class="font-bold mb-3">🚶 Directions from the Radisson</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-blue-300 font-bold text-sm mb-1">Via Skywalk (Recommended)</p>
-                                    <ul class="text-xs text-slate-300 space-y-1">
-                                        <li>1. Enter Skywalk from Radisson (7am–6pm weekdays)</li>
-                                        <li>2. Walk west to Canada Life Centre</li>
-                                        <li>3. South through Cityplace → Winnipeg Square</li>
-                                        <li>4. East on Portage Ave → south on Donald St</li>
-                                        <li>5. Arrive at <strong>185 Donald</strong> — ~10–15 min</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <p class="text-blue-300 font-bold text-sm mb-1">On Foot (Street Level)</p>
-                                    <ul class="text-xs text-slate-300 space-y-1">
-                                        <li>1. Exit Radisson onto Portage Ave</li>
-                                        <li>2. Walk east ~300m, turn south on Donald</li>
-                                        <li>3. Continue south to 185 Donald — ~15–20 min</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Airport & Transit -->
-            <div class="accordion-item" id="item-airport">
-                <div class="accordion-header flex items-center justify-between px-5 py-4" onclick="toggleAccordion('airport')">
-                    <div class="flex items-center gap-3">
-                        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider bg-blue-50 px-2 py-1 rounded">Getting Here</span>
-                        <h3 class="text-lg font-bold text-slate-900">Airport & Transit Directions</h3>
-                    </div>
-                    <svg class="chevron w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content px-5" id="content-airport">
-                    <div class="pb-5">
-                        <div class="bg-slate-900 text-white p-5 rounded-xl mb-5">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                                <div><p class="text-xs text-slate-400">Airport</p><p class="font-bold text-sm">YWG</p><p class="text-xs text-slate-500">1970 Wellington Ave</p></div>
-                                <div><p class="text-xs text-slate-400">Distance</p><p class="font-bold text-sm">~11 km / ~20 min</p></div>
-                                <div><p class="text-xs text-slate-400">Radisson</p><p class="font-bold text-sm">288 Portage Ave</p></div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-3">🚕 Uber / Rideshare</h4>
-                                <div class="grid grid-cols-2 gap-2 text-center mb-3">
-                                    <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">UberX</span><p class="font-bold text-sm">~$24</p></div>
-                                    <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">UberXL</span><p class="font-bold text-sm">~$42</p></div>
-                                    <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">Comfort</span><p class="font-bold text-sm">~$33</p></div>
-                                    <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">Electric</span><p class="font-bold text-sm">~$26</p></div>
-                                </div>
-                                <ul class="text-xs text-slate-600 space-y-1">
-                                    <li>📱 Request via Uber app after landing</li>
-                                    <li>💡 Uber Reserve available (up to 90 days ahead)</li>
-                                </ul>
-                            </div>
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-3">🚌 Airport Shuttle</h4>
-                                <ul class="text-xs text-slate-600 space-y-1">
-                                    <li><strong>Red Route:</strong> Alt Hotel → Fairmont → Forks → Mere → <strong>Radisson</strong></li>
-                                    <li><strong>Blue Route:</strong> Delta → Fort Garry → Hampton → Norwood</li>
-                                    <li>⏰ Every 30 min, ~09:00–22:00</li>
-                                    <li>🚀 Radisson: 15-min early shuttles (6:45–8AM)</li>
-                                    <li>📅 Check <strong>ywg.ca</strong> for schedules</li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Food Court & Services</h3>
                         <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-4">
-                            <h4 class="font-bold text-slate-900 mb-2">🚌 Public Transit</h4>
-                            <p class="text-sm text-slate-600 mb-2">Winnipeg Transit operates 86 bus routes. No LRT.</p>
-                            <ul class="text-xs text-slate-600 space-y-1">
-                                <li>🚌 <strong>Route 22:</strong> Airport area to downtown</li>
-                                <li>🚏 Nearest stop: Kasper – Hwy 1 Eastbound (~500m)</li>
-                                <li>❄️ Winter weather can affect schedules — plan extra time</li>
-                            </ul>
-                        </div>
-                        <div class="bg-emerald-50/50 border border-emerald-200 rounded-2xl p-5">
-                            <h4 class="font-bold text-slate-900 mb-3">✅ Quick Summary</h4>
-                            <div class="grid grid-cols-3 gap-4 text-center">
-                                <div><div class="text-2xl font-bold text-emerald-600">~$24</div><p class="text-xs text-slate-600">UberX</p></div>
-                                <div><div class="text-2xl font-bold text-emerald-600">~20 min</div><p class="text-xs text-slate-600">Drive time</p></div>
-                                <div><div class="text-2xl font-bold text-emerald-600">30 min</div><p class="text-xs text-slate-600">Shuttle to Radisson</p></div>
-                            </div>
+                            <p class="text-sm text-slate-600 mb-2"><strong>Food Court:</strong> Peg City Poutine, Sushi June, Za Pizza, Subway, Tim Hortons, A&W, Human Bean</p>
+                            <p class="text-sm text-slate-600"><strong>Services:</strong> Rexall Pharmacy, Manitoba Lotteries, dental, hair salon, dry cleaner, flower shop, multi-level heated parking.</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- SKYWALK SECTION: RBC & Delta -->
+            <section id="rbc" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Events & Accommodations</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">RBC Convention Centre & Delta Hotel</h2>
+                    <a href="https://www.wcc.mb.ca" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">
+                        wcc.mb.ca <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+                <p class="text-lg text-slate-600 mb-8">260,000+ sq. ft. of exhibition halls (Hall A-D) for conventions and galas.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border-l-4 border-indigo-600 pl-4">
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Restaurants & Pubs</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>🍻 <strong>Elephant & Castle</strong> (Delta) — British pub, draught ales</li>
+                            <li>🍽️ <strong>Blaze Bistro</strong> (Delta) — Manitoba cuisine</li>
+                            <li>🍛 <strong>East India Company</strong> — Indian buffet & lounge</li>
+                            <li>🍣 <strong>Ichiban</strong> — Teppanyaki steakhouse & sushi bar</li>
+                            <li>🥃 <strong>Shannon's Irish Pub</strong> — Live music, Guinness on tap</li>
+                        </ul>
+                    </div>
+                    <div class="bg-indigo-50/50 p-5 rounded-xl border border-indigo-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Accommodations</h3>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li>🏨 Delta Hotels by Marriott — Direct indoor integration</li>
+                            <li>🏢 Holiday Towers — Direct links to residential apartments</li>
+                            <li>🏦 BDC & provincial government offices</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SKYWALK SECTION: Millennium Library -->
+            <section id="library" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Civic Hub</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Millennium Library & Cargill Building</h2>
+                    <a href="https://wpl.winnipeg.ca" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">
+                        wpl.winnipeg.ca <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+                <div class="bg-white p-8 border border-slate-200 shadow-sm rounded-2xl mb-6">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Winnipeg Millennium Library</h3>
+                    <p class="text-slate-600">Main downtown public library with multi-floor book collections, IdeaBOX makerspace, quiet study lounges, public artwork, and an outdoor park terrace.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-900 mb-2">Transit & Corporate</h4>
+                    <p class="text-slate-700">Houses HSBC Bank and Cargill offices. Direct escalator access to the <strong>Graham Avenue Transit Mall</strong> — downtown's central bus interchange.</p>
+                </div>
+            </section>
+
+            <!-- SKYWALK SECTION: Winnipeg Square -->
+            <section id="wpgsquare" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Underground Concourse</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Winnipeg Square & 300/360 Main</h2>
+                    <a href="https://www.winnipegsquare.com" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">
+                        winnipegsquare.com <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="md:col-span-2">
+                        <h3 class="font-bold text-slate-900 mb-3">Underground Food Court</h3>
+                        <div class="grid grid-cols-2 gap-1 text-sm text-slate-600">
+                            <span>• Taste of Sri Lanka</span><span>• Stoneworks Bistro</span><span>• Vinh Long Vietnamese</span><span>• UMI Sushi</span><span>• Cookies by George</span><span>• Booster Juice</span><span>• Freshii</span><span>• Double Bowl</span><span>• Crown Town Pizzeria</span><span>• Oriental Wok</span><span>• Rodos Greek</span><span>• A&W</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900 text-white p-5 rounded-xl">
+                        <h3 class="font-bold mb-3">Tower Anchors</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li><span class="text-blue-300">300 Main</span> — Tallest luxury apartment tower</li>
+                            <li><span class="text-blue-300">360 Main</span> — Commodity Exchange Tower</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-slate-900 mb-2">Retail & Services</h3>
+                    <p class="text-sm text-slate-600">Shoppers Drug Mart (with Post Office), Mayberry Fine Art, TD Canada Trust, Access Credit Union, The UPS Store, dental centre, salons.</p>
+                </div>
+            </section>
+
+            <!-- SKYWALK SECTION: Portage & Main -->
+            <section id="portagemain" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">The Iconic Intersection</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Portage & Main Concourse</h2>
+                </div>
+                <p class="text-lg text-slate-600 mb-6">The safest and warmest way to cross Canada's windiest intersection year-round. Connects the Richardson Building, 201 Portage, and the Fairmont Hotel.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Fine Dining</h3>
+                        <ul class="space-y-2">
+                            <li class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm"><strong class="text-slate-900">Hy's Steakhouse & Cocktail Bar</strong><br><span class="text-sm text-slate-500">Richardson Building. Classic prime steaks, tableside cocktails.</span></li>
+                            <li class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm"><strong class="text-slate-900">VG Restaurant & Lounge</strong><br><span class="text-sm text-slate-500">Fairmont. Modern Canadian fine dining, regional game, craft cocktails.</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Hotels & Financial Hub</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-slate-700">
+                            <li><strong>Fairmont Winnipeg</strong> — Premier luxury hotel</li>
+                            <li><strong>RBC, CIBC, Scotiabank</strong></li>
+                            <li>TDS Law offices, Concourse Sports & Ergonomic Physiotherapy</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SKYWALK SECTION: Manitoba Hydro Place -->
+            <section id="hydro" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Architectural Marvel</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Manitoba Hydro Place</h2>
+                </div>
+                <div class="bg-slate-900 p-8 rounded-2xl mb-6 flex items-end overflow-hidden" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); min-height: 200px;">
+                    <div><h3 class="text-white font-bold text-2xl">360 Portage Ave</h3><p class="text-slate-400 mt-1">Award-winning green skyscraper</p></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="prose text-slate-600">
+                        <p class="text-lg">Soaring glass atrium with a continuous indoor waterfall wall designed for natural humidity regulation. Warm public indoor seating zones popular during winter months.</p>
+                        <p class="mt-4">Features an express coffee vendor and rotating public art installations.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 mb-2">Connectivity</h4>
+                        <p class="text-sm text-slate-600">Vital pedestrian pass-through connecting the Graham Avenue transit spine to Portage Avenue.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SKYWALK SECTION: Portage Place & YMCA -->
+            <section id="portageplace" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Western Extensions</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Portage Place & YMCA</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 border border-slate-200 shadow-sm rounded-xl">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 flex items-center">🎭 Arts & Entertainment</h3>
+                        <p class="text-sm text-slate-600"><strong>Prairie Theatre Exchange</strong> — Mainstage theater producing original Canadian plays, with a fully licensed lobby lounge accessible via the skywalk.</p>
+                    </div>
+                    <div class="bg-white p-6 border border-slate-200 shadow-sm rounded-xl">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 flex items-center">🏋️ Fitness & Wellness</h3>
+                        <p class="text-sm text-slate-600"><strong>Downtown YMCA/YWCA</strong> — Swimming pool, indoor running track, weight room, basketball court, drop-in classes.</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-slate-900 mb-2">Retail & Civic Services</h3>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-slate-700">
+                        <li>Portage Place shopping concourse, Tim Hortons (Power Building), convenience vendors, Somali Mall shops</li>
+                        <li>Downtown Winnipeg BIZ offices, Investors Group (One Canada Centre), Fred Douglas Chateau</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- OTHER SECTION: Radisson Hotel -->
+            <section id="radisson" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Start of the Loop</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Radisson Hotel Winnipeg Downtown</h2>
+                    <a href="https://www.radissonhotels.com/en-us/hotels/radisson-winnipeg-downtown" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">
+                        Official Website <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-800 mb-3 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
+                            Dining & Drinks
+                        </h3>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li><strong>12 Resto Bar & Lounge</strong> — 12th floor, floor-to-ceiling downtown views, cocktails, local drafts.</li>
+                            <li><strong>Starbucks Coffee</strong> — On-site café.</li>
+                            <li><strong>Lobby Coffee Counter</strong> — Morning espresso, teas, grab-and-go breakfast.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-800 mb-3 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Connections
+                        </h3>
+                        <p class="text-sm text-slate-600 mb-3">Primary eastern anchor for the southern Skywalk route. Connects west to Canada Life Centre and south toward Cityplace.</p>
+                        <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                            <li>Direct heated parkade access</li>
+                            <li>Concierge & business meeting facilities</li>
+                            <li>Skywalk open weekdays 7am–6pm</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OTHER SECTION: Radisson Details -->
+            <section id="radisson-amenities" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Know Before You Go</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Radisson Hotel Winnipeg Downtown — Full Guide</h2>
+                </div>
+                <div class="bg-slate-900 text-white p-6 rounded-xl mb-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div><p class="text-xs text-slate-400">Address</p><p class="font-bold text-sm">288 Portage Ave</p></div>
+                        <div><p class="text-xs text-slate-400">Phone</p><p class="font-bold text-sm">(204) 956-0410</p></div>
+                        <div><p class="text-xs text-slate-400">Check-in</p><p class="font-bold text-sm">3:00 PM</p></div>
+                        <div><p class="text-xs text-slate-400">Rating</p><p class="font-bold text-sm">4-star · ~389 rooms</p></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">Room Features</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>Refrigerator & microwave</li>
+                            <li>32" flat-screen TV</li>
+                            <li>Tea/coffee maker, work desk</li>
+                            <li>Free high-speed Wi-Fi</li>
+                            <li>Whirlpool suites with city views</li>
+                            <li>Air conditioning & heating</li>
+                            <li>Allergy-free & non-smoking</li>
+                            <li>Iron/ironing board</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">Facilities</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>🏋️ Fitness center</li>
+                            <li>🧖 Sauna & shared lounge</li>
+                            <li>💼 24-hour business centre</li>
+                            <li>🚐 Daily city shuttle</li>
+                            <li>💰 Currency exchange & ATM</li>
+                            <li>🐾 Pets welcome</li>
+                            <li>🅿️ Private parking</li>
+                            <li>🔒 24-hour security</li>
+                            <li>📞 24-hour front desk & express check-in/out</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Things to Know</h3>
+                    <ul class="space-y-2 text-slate-700">
+                        <li>📍 1 block from Canada Life Centre via skywalk. 15-min walk to Exchange District & Chinatown.</li>
+                        <li>🚇 ~500m from Kasper – Hwy 1 Eastbound bus station.</li>
+                        <li>🏛️ Nearby: Millennium Library Park (~5 min), Manitoba Museum (~1.1 km), The Forks (~1.5 km).</li>
+                        <li>✈️ Airport ~5 km away.</li>
+                        <li>🛤️ Skywalk open weekdays 7am–6pm.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- OTHER SECTION: The Keg -->
+            <section id="keg" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Dining</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">The Keg Steakhouse + Bar</h2>
+                    <a href="https://www.thekeg.com/en/locations/garry-street" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2 text-sm">thekeg.com</a>
+                </div>
+                <div class="bg-blue-50/50 border border-amber-200 rounded-2xl p-6 mb-6">
+                    <p class="text-amber-900"><strong>⚠️ Relocation:</strong> Moved from 115 Garry St to <strong>185 Donald Street</strong> (DSM tower) — expected late fall 2026.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">Location</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>📍 185 Donald Street (new) / 115 Garry St (former)</li>
+                            <li>📞 (204) 942-7619</li>
+                            <li>🕐 Mon–Thu 4PM–11PM | Fri–Sat 4PM–12AM | Sun 4PM–10PM</li>
+                            <li>🎉 Happy Hour daily to 5:30PM & 9PM–close</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">What to Expect</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>🥩 Prime Rib, Filet Mignon, Lobster Tail, Blackened Chicken</li>
+                            <li>🍟 Keg Fries & Billy Miner Pie</li>
+                            <li>🍷 Full bar, lounge, patio</li>
+                            <li>🧒 Kids' menu available</li>
+                            <li>📅 Reservations recommended</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OTHER SECTION: Keg Directions -->
+            <section id="keg-directions" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Directions</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Directions from the Radisson Hotel</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-900 text-white p-6 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-blue-300">🚶 Via Skywalk (Recommended)</h3>
+                        <ul class="space-y-3 text-slate-300 text-sm">
+                            <li>1. Enter Skywalk from Radisson lobby (7am–6pm weekdays)</li>
+                            <li>2. Walk west toward Canada Life Centre</li>
+                            <li>3. Continue south through Cityplace toward Winnipeg Square</li>
+                            <li>4. East on Portage Ave, then south on Donald Street</li>
+                            <li>5. Arrive at <strong>185 Donald Street</strong> — ~10–15 min</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">🚶 On Foot (Street Level)</h3>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li>1. Exit Radisson onto Portage Avenue</li>
+                            <li>2. Walk east ~300m, turn south on Donald Street</li>
+                            <li>3. Continue south to 185 Donald — ~15–20 min</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OTHER SECTION: Airport & Transit -->
+            <section id="airport" class="section">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Getting Here</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Airport & Transit Directions</h2>
+                    <p class="text-slate-600 mt-2">How to get from YWG to the Radisson and downtown</p>
+                </div>
+                <div class="bg-slate-900 text-white p-6 rounded-xl mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div><p class="text-xs text-slate-400">Airport</p><p class="font-bold text-sm">YWG</p><p class="text-xs text-slate-500">1970 Wellington Ave</p></div>
+                        <div><p class="text-xs text-slate-400">Distance</p><p class="font-bold text-sm">~11 km / ~20 min</p></div>
+                        <div><p class="text-xs text-slate-400">Radisson</p><p class="font-bold text-sm">288 Portage Ave</p></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">🚕 Uber / Rideshare</h3>
+                        <div class="grid grid-cols-2 gap-2 text-center mb-4">
+                            <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">UberX</span><p class="font-bold text-sm">~$24</p></div>
+                            <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">UberXL</span><p class="font-bold text-sm">~$42</p></div>
+                            <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">Comfort</span><p class="font-bold text-sm">~$33</p></div>
+                            <div class="bg-white p-2 rounded-lg border"><span class="text-xs text-slate-500">Electric</span><p class="font-bold text-sm">~$26</p></div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li>📱 Request via Uber app after landing</li>
+                            <li>💡 Uber Reserve available (up to 90 days ahead)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">🚌 Airport Shuttle</h3>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li><strong>Red Route:</strong> Alt Hotel → Fairmont → Forks → Mere → <strong>Radisson</strong></li>
+                            <li><strong>Blue Route:</strong> Delta → Fort Garry → Hampton → Norwood</li>
+                            <li>⏰ Every 30 min, ~09:00–22:00</li>
+                            <li>🚀 Radisson: 15-min early shuttles (6:45–8AM)</li>
+                            <li>📅 Check <strong>ywg.ca</strong> for schedules</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">🚌 Public Transit</h3>
+                    <p class="text-sm text-slate-600 mb-2">Winnipeg Transit — 86 bus routes, no LRT.</p>
+                    <ul class="text-sm text-slate-600 space-y-1">
+                        <li>🚌 <strong>Route 22:</strong> Airport area to downtown</li>
+                        <li>🚏 Nearest stop: Kasper – Hwy 1 Eastbound (~500m)</li>
+                        <li>❄️ Winter weather can affect schedules — plan extra time</li>
+                    </ul>
+                </div>
+                <div class="bg-emerald-50/50 border border-emerald-200 rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">✅ Quick Summary</h3>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div><div class="text-3xl font-bold text-emerald-600">~$24</div><p class="text-sm text-slate-600">UberX</p></div>
+                        <div><div class="text-3xl font-bold text-emerald-600">~20 min</div><p class="text-sm text-slate-600">Drive time</p></div>
+                        <div><div class="text-3xl font-bold text-emerald-600">30 min</div><p class="text-sm text-slate-600">Shuttle to Radisson</p></div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-200 bg-white">
-        <div class="max-w-4xl mx-auto px-4 py-4 text-center text-sm text-slate-400">
-            Winnipeg Skywalk System Report · Built with love for the windiest city on Earth
+        <div class="max-w-5xl mx-auto px-4 py-4 text-center text-sm text-slate-400">
+            Winnipeg Skywalk System Report · Built for the windiest city on Earth
         </div>
     </footer>
 
     <script>
-        function toggleAccordion(id) {
-            const content = document.getElementById('content-' + id);
-            const chevron = content.querySelector('.chevron');
-            const item = content.closest('.accordion-item');
+        // Section navigation
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            const section = document.getElementById(id);
+            if (section) section.classList.add('active');
 
-            // Find the group this item belongs to
-            const parentContainer = item.parentElement;
+            // Update nav button highlighting
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+            });
+            const activeBtn = document.getElementById('btn-' + id);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+                activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+            }
 
-            // Close all other items in the same container
-            parentContainer.querySelectorAll('.accordion-item').forEach(sibling => {
-                if (sibling !== item) {
-                    sibling.classList.remove('active');
-                    const sibContent = sibling.querySelector('.accordion-content');
-                    const sibChevron = sibContent.querySelector('.chevron');
-                    sibContent.classList.remove('open');
-                    sibChevron.classList.remove('open');
+            // Update submenu active state
+            document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
+
+            window.history.pushState(null, null, '#' + id);
+
+            if (window.innerWidth < 768) {
+                const nav = document.getElementById('sidebar-nav');
+                const icon = document.getElementById('menu-icon');
+                if (!nav.classList.contains('hidden')) {
+                    nav.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
                 }
+            }
+        }
+
+        // Sidebar submenu toggle
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            const chevron = submenu.previousElementSibling.querySelector('.chevron');
+            const isOpen = submenu.classList.contains('open');
+
+            // Close all submenus
+            document.querySelectorAll('.submenu').forEach(s => {
+                s.classList.remove('open');
+                const c = s.previousElementSibling?.querySelector('.chevron');
+                if (c) c.classList.remove('open');
             });
 
             // Toggle current
-            const isOpen = content.classList.contains('open');
-            if (isOpen) {
-                content.classList.remove('open');
-                chevron.classList.remove('open');
-                item.classList.remove('active');
-            } else {
-                content.classList.add('open');
-                chevron.classList.add('open');
-                item.classList.add('active');
+            if (!isOpen) {
+                submenu.classList.add('open');
+                if (chevron) chevron.classList.add('open');
             }
         }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('sidebar-nav');
+            const icon = document.getElementById('menu-icon');
+            if (nav.classList.contains('hidden')) {
+                nav.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                nav.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                showSection(hash);
+            } else {
+                showSection('canadalife');
+            }
+        });
     </script>
 </body>
 </html>
