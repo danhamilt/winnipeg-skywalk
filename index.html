@@ -11,7 +11,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
         }
-        /* Custom scrollbar for a polished look */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -27,7 +26,6 @@
             background: #94a3b8; 
         }
         
-        /* Smooth fade in for content */
         .fade-in {
             animation: fadeIn 0.3s ease-in-out;
         }
@@ -46,7 +44,7 @@
             <p class="text-sm text-slate-400 mt-1">Interactive Facility Report</p>
         </div>
         
-        <!-- Mobile Toggle (Visible only on small screens) -->
+        <!-- Mobile Toggle -->
         <div class="md:hidden p-4 border-b border-slate-700 bg-slate-800 flex justify-between items-center cursor-pointer" onclick="toggleMobileMenu()">
             <span class="font-semibold text-white">Select Location</span>
             <svg id="menu-icon" class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -55,6 +53,9 @@
         <nav id="sidebar-nav" class="flex-1 overflow-y-auto hidden md:block py-4">
             <ul class="space-y-1 px-3">
                 <li><button id="btn-radisson" onclick="showSection('radisson')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 text-white bg-blue-600 shadow-md font-medium">Radisson Hotel</button></li>
+                <li><button id="btn-radisson-amenities" onclick="showSection('radisson-amenities')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white">Radisson Details</button></li>
+                <li><button id="btn-keg" onclick="showSection('keg')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white">The Keg Steakhouse</button></li>
+                <li><button id="btn-airport" onclick="showSection('airport')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white">Airport & Transit</button></li>
                 <li><button id="btn-canadalife" onclick="showSection('canadalife')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white">Canada Life Centre</button></li>
                 <li><button id="btn-truenorth" onclick="showSection('truenorth')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white">True North Square</button></li>
                 <li><button id="btn-cityplace" onclick="showSection('cityplace')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-slate-800 hover:text-white">Cityplace</button></li>
@@ -85,13 +86,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
                         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                            <svg class="w-6 h-6 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
+                            <svg class="w-6 h-6 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
                             Dining & Drinks
                         </h3>
                         <ul class="space-y-4">
                             <li>
                                 <strong class="text-slate-900 block text-lg">12 Resto Bar & Lounge</strong>
                                 <span class="text-slate-600 text-sm">Located on the 12th floor. Features floor-to-ceiling downtown views, a relaxed cocktail lounge, local draft beers, and an upscale-casual dinner menu.</span>
+                            </li>
+                            <li>
+                                <strong class="text-slate-900 block text-lg">Starbucks Coffee</strong>
+                                <span class="text-slate-600 text-sm">On-site café for quick coffee and snacks.</span>
                             </li>
                             <li>
                                 <strong class="text-slate-900 block text-lg">Lobby Coffee Counter</strong>
@@ -111,7 +116,265 @@
                         <ul class="list-disc pl-5 text-slate-600 space-y-1">
                             <li>Direct heated parkade access.</li>
                             <li>Concierge and business meeting facilities.</li>
+                            <li>Skywalk connection open weekdays 7am–6pm (to Cityplace, Canada Life Centre, Winnipeg Square).</li>
                         </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Radisson Details & Amenities -->
+            <section id="radisson-amenities" class="report-section hidden fade-in">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Know Before You Go</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Radisson Hotel Winnipeg Downtown — Full Guide</h2>
+                    <a href="https://www.radissonhotels.com/en-us/hotels/radisson-winnipeg-downtown" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2">
+                        Official Website <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 rounded-xl mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Address</h3>
+                            <p class="text-slate-300">288 Portage Avenue, Winnipeg, MB R3C 0B8</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Phone</h3>
+                            <p class="text-slate-300">(204) 956-0410</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Check-in / Check-out</h3>
+                            <p class="text-slate-300">3:00 PM / 12:00 PM</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Rating</h3>
+                            <p class="text-slate-300">4-star · ~214–389 rooms</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.28 13.12a2 2 0 002 1.88h4.44a2 2 0 002-1.88L21 8l-4 12m-5-4l-4 4m-4-4l4 4"></path></svg>
+                            Room Features
+                        </h3>
+                        <ul class="space-y-3 text-slate-600">
+                            <li>Refrigerator & microwave in every room</li>
+                            <li>32" flat-screen TV with cable channels</li>
+                            <li>Tea/coffee maker and work desk</li>
+                            <li>Free high-speed Wi-Fi</li>
+                            <li>Air conditioning & heating</li>
+                            <li>Whirlpool suites available with panoramic city views</li>
+                            <li>Allergy-free & non-smoking rooms available</li>
+                            <li>Iron/ironing board in-room</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Facilities & Services
+                        </h3>
+                        <ul class="space-y-3 text-slate-600">
+                            <li><strong>Fitness Center</strong> — Full gym for guests</li>
+                            <li><strong>Sauna & Shared Lounge</strong></li>
+                            <li><strong>Business Centre</strong> — 24-hour with conference facilities</li>
+                            <li><strong>Daily City Shuttle</strong> — Guest transportation around downtown</li>
+                            <li><strong>24-hour Front Desk</strong> — Express check-in/out</li>
+                            <li><strong>Currency Exchange</strong> & ATM on-site</li>
+                            <li><strong>Luggage Storage</strong> & concierge</li>
+                            <li><strong>Pets Welcome</strong></li>
+                            <li><strong>Private Parking</strong> available</li>
+                            <li><strong>24-hour Security</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 md:p-8 mb-8">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Things to Know</h3>
+                    <ul class="space-y-3 text-slate-700">
+                        <li>📍 <strong>Location:</strong> 1 block from Canada Life Centre, connected by skywalk. 15-min walk to the Exchange District & Chinatown.</li>
+                        <li>🚇 <strong>Transit:</strong> ~500m from Kasper – Hwy 1 Eastbound bus station.</li>
+                        <li>🍽️ <strong>Dining:</strong> 12 Resto Bar (12th floor, city views), Starbucks, and nearby Old Market Square restaurants.</li>
+                        <li>🏛️ <strong>Nearby:</strong> Millennium Library Park (~5 min), Manitoba Museum (~1.1 km), The Forks (~1.5 km), Burton Cummings Theatre.</li>
+                        <li>✈️ <strong>Airport:</strong> ~5 km from Winnipeg Richardson International Airport (YWG).</li>
+                        <li>🛤️ <strong>Skywalk Access:</strong> Open weekdays 7am–6pm — connects to Cityplace, Canada Life Centre, and Winnipeg Square.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section: The Keg Steakhouse -->
+            <section id="keg" class="report-section hidden fade-in">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Dining</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">The Keg Steakhouse + Bar</h2>
+                    <a href="https://www.thekeg.com/en/locations/garry-street" target="_blank" class="text-blue-500 hover:underline inline-flex items-center mt-2">
+                        thekeg.com <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+
+                <div class="bg-blue-50/50 border border-amber-200 rounded-2xl p-6 mb-8">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">⚠️ Relocation Notice</h3>
+                    <p class="text-slate-700">The Keg at <strong>115 Garry Street</strong> closed July 29, 2026 after 50+ years. It is relocating to <strong>185 Donald Street</strong> (the DSM apartment tower) — expected to reopen late fall 2026. The new location is inside the Skywalk system near Portage & Main.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Location Details
+                        </h3>
+                        <ul class="space-y-3 text-slate-700">
+                            <li><strong>Current/Upcoming:</strong> 185 Donald Street, Winnipeg, MB (DSM apartment tower, ground floor)</li>
+                            <li><strong>Former:</strong> 115 Garry Street (closed July 29, 2026)</li>
+                            <li><strong>Phone:</strong> (204) 942-7619</li>
+                            <li><strong>Hours:</strong> Mon–Thu 4PM–11PM, Fri–Sat 4PM–12AM, Sun 4PM–10PM</li>
+                            <li><strong>Happy Hour:</strong> Daily to 5:30PM and 9PM–close</li>
+                            <li><strong>Accessibility:</strong> Wheelchair accessible, patio, bar, lounge, semi-private dining room</li>
+                            <li><strong>Parking:</strong> Street parking nearby</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">What to Expect</h3>
+                        <ul class="space-y-3 text-slate-600">
+                            <li>🥩 Signature steaks: Prime Rib, Filet Mignon, Lobster Tail, Blackened Chicken</li>
+                            <li>🍟 Keg Fries & Billy Miner Pie (famous dessert)</li>
+                            <li>🍷 Full bar, lounge, and patio seating</li>
+                            <li>🧒 Kids' menu available</li>
+                            <li>🔥 Fireplace in the dining room</li>
+                            <li>💳 Credit/Debit and mobile payments accepted</li>
+                            <li>📅 Reservations recommended; often has a wait</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 rounded-xl mt-8">
+                    <h3 class="text-2xl font-bold mb-4">🚶 Directions from the Radisson Hotel</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-blue-300 mb-2">Via Skywalk (Recommended)</h4>
+                            <ul class="space-y-2 text-slate-300 text-sm">
+                                <li>1. Exit the Radisson lobby and enter the Skywalk (open 7am–6pm weekdays)</li>
+                                <li>2. Walk west toward Canada Life Centre</li>
+                                <li>3. Continue south through Cityplace toward Winnipeg Square</li>
+                                <li>4. At Winnipeg Square, follow signs toward Portage Avenue</li>
+                                <li>5. Head east on Portage Avenue, then turn south onto Donald Street</li>
+                                <li>6. The Keg's new location is at <strong>185 Donald Street</strong> (DSM building)</li>
+                                <li>🕐 <strong>Total: ~10–15 minutes</strong> via Skywalk</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-300 mb-2">On Foot (Street Level)</h4>
+                            <ul class="space-y-2 text-slate-300 text-sm">
+                                <li>1. Exit the Radisson onto Portage Avenue</li>
+                                <li>2. Walk east on Portage Avenue (~300m)</li>
+                                <li>3. Turn south onto Donald Street</li>
+                                <li>4. Continue south on Donald Street to 185 Donald</li>
+                                <li>🕐 <strong>Total: ~15–20 minutes</strong></li>
+                                <li>⚠️ Note: Donald Street bridge connects the Radisson atrium toward Canada Life Centre</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Airport & Transit -->
+            <section id="airport" class="report-section hidden fade-in">
+                <div class="mb-8 border-b border-slate-200 pb-6">
+                    <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Getting Here</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Airport & Transit Directions</h2>
+                    <p class="text-lg text-slate-600 mt-2">How to get from Winnipeg James Armstrong Richardson International Airport (YWG) to the Radisson and downtown</p>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 rounded-xl mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Airport</h3>
+                            <p class="text-slate-300">Winnipeg Richardson International Airport (YWG)</p>
+                            <p class="text-slate-400 text-sm">1970 Wellington Avenue, Winnipeg, MB R3H 1C2</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Distance to Downtown</h3>
+                            <p class="text-slate-300">~11 km (~5 minutes by car)</p>
+                            <p class="text-slate-400 text-sm">~19 minutes typical drive time</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Radisson Address</h3>
+                            <p class="text-slate-300">288 Portage Avenue, Winnipeg</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+                            🚕 Uber / Rideshare
+                        </h3>
+                        <ul class="space-y-3 text-slate-700">
+                            <li><strong>UberX:</strong> ~CA$24 average</li>
+                            <li><strong>UberXL:</strong> ~CA$42 average</li>
+                            <li><strong>Comfort:</strong> ~CA$33 average</li>
+                            <li><strong>Time:</strong> ~19–20 minutes</li>
+                            <li><strong>Distance:</strong> ~11 km</li>
+                            <li>📱 Request via the Uber app after landing</li>
+                            <li>🚙 Pickup is at the airport terminal — follow app directions</li>
+                            <li>💡 <strong>Tip:</strong> Uber Reserve available to book up to 90 days ahead</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+                            🚌 Airport Shuttle (Hotel Route)
+                        </h3>
+                        <ul class="space-y-3 text-slate-700">
+                            <li><strong>Red Route</strong> serves the <strong>Radisson Winnipeg Downtown</strong></li>
+                            <li><strong>Frequency:</strong> Every 30 minutes</li>
+                            <li><strong>Hours:</strong> ~09:00–22:00 (varies by day)</li>
+                            <li><strong>Stops:</strong> Alt Hotel → Fairmont → Inn at The Forks → Mere Hotel → <strong>Radisson</strong></li>
+                            <li><strong>Blue Route:</strong> Delta → Fort Garry → Hampton Inn → Norwood Hotel</li>
+                            <li>📅 Schedules vary by day/week — check <strong>ywg.ca</strong> for current schedules</li>
+                            <li>💡 <strong>Pro tip:</strong> Radisson also gets a dedicated early-morning shuttle (every 15 min, 6:45–8:00 AM) to RBC Convention Centre</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">🚌 Public Transit</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-slate-700 mb-3"><strong>Winnipeg Transit</strong> operates 86 bus routes across the city. No LRT or light rail exists.</p>
+                            <ul class="space-y-2 text-slate-600">
+                                <li>🚌 <strong>Route 22:</strong> Connects the airport area to downtown (Radisson area)</li>
+                                <li>🚏 Nearest stop to Radisson: Kasper – Hwy 1 Eastbound (~500m)</li>
+                                <li>💳 Purchase tickets via the <strong>Transit</strong> app or at the airport</li>
+                                <li>❄️ Winter weather can affect schedules — plan extra time</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 mb-2">Other Options</h4>
+                            <ul class="space-y-2 text-slate-600">
+                                <li>🚗 <strong>Car Rental:</strong> Avis, Dollar, Budget available at the airport</li>
+                                <li>🚕 <strong>Traditional Taxi:</strong> Available at the airport arrivals area</li>
+                                <li>🚘 <strong>Rental Cars via Uber Rent:</strong> Compare prices at YWG</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-50/50 border border-emerald-200 rounded-2xl p-6">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">✅ Quick Summary</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-emerald-600">~$24</div>
+                            <div class="text-sm text-slate-600">UberX from airport</div>
+                        </div>
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-emerald-600">~20 min</div>
+                            <div class="text-sm text-slate-600">Drive time</div>
+                        </div>
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-emerald-600">30 min</div>
+                            <div class="text-sm text-slate-600">Airport shuttle to Radisson</div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -573,7 +836,6 @@
     <script>
         // Initialization
         document.addEventListener('DOMContentLoaded', () => {
-            // Check hash in URL or default to radisson
             const hash = window.location.hash.substring(1);
             if (hash && document.getElementById(hash)) {
                 showSection(hash);
@@ -583,38 +845,32 @@
         });
 
         function showSection(id) {
-            // Hide all sections
             const sections = document.querySelectorAll('.report-section');
             sections.forEach(section => {
                 section.classList.add('hidden');
                 section.classList.remove('block');
             });
 
-            // Reset all buttons styling
             const buttons = document.querySelectorAll('.nav-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
                 btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
             });
 
-            // Show selected section
             const activeSection = document.getElementById(id);
             if(activeSection) {
                 activeSection.classList.remove('hidden');
                 activeSection.classList.add('block');
             }
 
-            // Highlight active button
             const activeBtn = document.getElementById('btn-' + id);
             if(activeBtn) {
                 activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
                 activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
             }
             
-            // Update URL hash for history/sharing
             window.history.pushState(null, null, '#' + id);
             
-            // On mobile, close menu after selection
             if (window.innerWidth < 768) {
                 const nav = document.getElementById('sidebar-nav');
                 const icon = document.getElementById('menu-icon');
